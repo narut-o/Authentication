@@ -93,18 +93,17 @@ app.get("/register",function(req,res){
 });
 
 app.get("/secrets",function(req,res){
-    if(req.isAuthenticated())
-    {
-       User.findById(req.user.id,function(err,foundUser){
+   User.find({secret:{$ne:null}},function(err,foundUser){
+       if(err)
+       {
+           console.log(err);
+       }else{
            if(foundUser)
            {
-               res.render("secrets",{secret:foundUser.secret});
+               res.render("secrets",{usersWithSecrets:foundUser});
            }
-       });
-        
-    }else{
-        res.redirect("/login");
-    }
+       }
+   });
 });
 app.get("/submit",function(req,res){
     if(req.isAuthenticated())
